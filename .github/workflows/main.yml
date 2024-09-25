@@ -12,13 +12,12 @@ jobs:
       - name: Install Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '22' # ou la version de Node.js que tu utilises
-
+          node-version: '22'
       - name: Install PNPM
         run: npm install -g pnpm
 
       - name: Install dependencies with PNPM
-        run: pnpm install # Cette étape installe les dépendances
+        run: pnpm install
 
       - name: Cypress run
         uses: cypress-io/github-action@v6

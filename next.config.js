@@ -9,5 +9,8 @@ module.exports = {
         pathname: '/s/files/**'
       }
     ]
+  },
+  experimental: {
+    exportPageTimeout: 300000
   }
 };
