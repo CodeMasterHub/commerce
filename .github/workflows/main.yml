@@ -12,7 +12,7 @@ jobs:
       - name: Cypress run
         uses: cypress-io/github-action@v6
         with:
-          project: ./cypress
+          project: ./
           browser: chrome
           build: pnpm build
           start: pnpm start
