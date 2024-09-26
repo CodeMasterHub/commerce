@@ -6,9 +6,6 @@ jobs:
   install:
     runs-on: ubuntu-latest
     steps:
-      - name: Set locale
-        run: sudo update-locale LANG=fr_FR.UTF-8
-
       - name: Checkout
         uses: actions/checkout@v4
 
