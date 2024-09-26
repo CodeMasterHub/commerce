@@ -42,16 +42,16 @@ jobs:
           SHOPIFY_STOREFRONT_ACCESS_TOKEN: ${{ secrets.SHOPIFY_STOREFRONT_ACCESS_TOKEN }}
           NEXT_PUBLIC_SHOPIFY_STOREFRONT_ACCESS_TOKEN: ${{ secrets.NEXT_PUBLIC_SHOPIFY_STOREFRONT_ACCESS_TOKEN }}
 
-      # Étape pour uploader les screenshots
       - name: Upload Cypress screenshots
+        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: cypress-screenshots
-          path: cypress/screenshots # Chemin vers les captures d'écran
+          path: cypress/screenshots
 
-      # Étape pour uploader les vidéos
       - name: Upload Cypress videos
+        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: cypress-videos
-          path: cypress/videos # Chemin vers les vidéos enregistrées
+          path: cypress/videos
