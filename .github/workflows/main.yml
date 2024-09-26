@@ -1,0 +1,57 @@
+name: E2E on Chrome
+
+on: [push]
+
+jobs:
+  install:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Install PNPM
+        run: npm install -g pnpm
+
+      - name: Install dependencies with PNPM
+        run: pnpm install
+
+      - name: Cypress run
+        uses: cypress-io/github-action@v6
+        with:
+          project: ./
+          browser: chrome
+          build: pnpm build
+          start: pnpm start
+          wait-on: 'http://localhost:3000'
+          record: false
+          video: true
+          screenshots-folder: cypress/screenshots
+          videos-folder: cypress/videos
+          component: false
+        env:
+          COMPANY_NAME: 'Testify Automation'
+          SITE_NAME: 'NextJS Shopify Demo'
+          NEXT_PUBLIC_SHOPIFY_STORE_DOMAIN: 'testify-automation.myshopify.com'
+          SHOPIFY_STORE_DOMAIN: 'testify-automation.myshopify.com'
+          SHOPIFY_REVALIDATION_SECRET: ${{ secrets.SHOPIFY_REVALIDATION_SECRET }}
+          SHOPIFY_STOREFRONT_ACCESS_TOKEN: ${{ secrets.SHOPIFY_STOREFRONT_ACCESS_TOKEN }}
+          NEXT_PUBLIC_SHOPIFY_STOREFRONT_ACCESS_TOKEN: ${{ secrets.NEXT_PUBLIC_SHOPIFY_STOREFRONT_ACCESS_TOKEN }}
+
+      - name: Upload Cypress screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: cypress-screenshots
+          path: cypress/screenshots
+
+      - name: Upload Cypress videos
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: cypress-videos
+          path: cypress/videos/**/*.mp4
