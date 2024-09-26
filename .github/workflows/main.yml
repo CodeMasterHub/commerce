@@ -29,7 +29,7 @@ jobs:
           start: pnpm start
           wait-on: 'http://localhost:3000'
           record: false
-          video: true # Enregistre des vidéos
+          video: true
           screenshots-folder: cypress/screenshots
           videos-folder: cypress/videos
           component: false
@@ -54,4 +54,4 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: cypress-videos
-          path: cypress/videos
+          path: cypress/videos/**/*.mp4
