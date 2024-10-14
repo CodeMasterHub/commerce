@@ -36,6 +36,6 @@ Then('the price should be displayed in EUR with two decimal points', () => {
   cy.getBySel('price-amount').each(($el) => {
     cy.wrap($el)
       .invoke('text')
-      .should('match', /^[€$£]?(\d{1,3}(,\d{3})*|\d+)\.\d{2}[A-Z]{3}$/); // Vérifie le format EUR avec deux décimales
+      .should('match', /(\d{1,3}(\s\d{3})*|\d+)\,\d{2}\s[€$£]+$/); // Vérifie le format EUR avec deux décimales
   });
 });
