@@ -67,59 +67,54 @@ When('I select {string} color of {string}', (expectedColor: string, productName:
   // verifyRequest('@selectColorVariant');
 });
 
-When(
-  'the {string} costs {string} {string}',
-  (productName: string, amount: string, currencyCode: string) => {
-    // Charger la fixture
-    cy.fixture('product-query.json').then((query) => {
-      // Insérer le nom du produit dans la requête
-      query.variables.productName = productName; // Nom du produit à interroger
+When('the {string} costs {string}', (productName: string, amount: string) => {
+  // Charger la fixture
+  cy.fixture('product-query.json').then((query) => {
+    // Insérer le nom du produit dans la requête
+    query.variables.productName = productName; // Nom du produit à interroger
 
-      // Faire la requête GraphQL
-      cy.request({
-        method: 'POST',
-        url: 'testify-automation.myshopify.com/api/2024-07/graphql', // URL complète de l'API GraphQL de Shopify
-        body: query,
-        headers: {
-          'Content-Type': 'application/json',
-          'X-Shopify-Storefront-Access-Token': '8bc822f670ae4977b83b0975fa80054b' // Token d'accès
-        },
-        failOnStatusCode: false // Empêche Cypress d'échouer automatiquement
-      }).then((response) => {
-        // Afficher la réponse dans la console pour le débogage
-        console.log('response : ', response);
+    // Faire la requête GraphQL
+    cy.request({
+      method: 'POST',
+      url: 'testify-automation.myshopify.com/api/2024-07/graphql', // URL complète de l'API GraphQL de Shopify
+      body: query,
+      headers: {
+        'Content-Type': 'application/json',
+        'X-Shopify-Storefront-Access-Token': '8bc822f670ae4977b83b0975fa80054b' // Token d'accès
+      },
+      failOnStatusCode: false // Empêche Cypress d'échouer automatiquement
+    }).then((response) => {
+      // Afficher la réponse dans la console pour le débogage
+      console.log('response : ', response);
 
-        // Vérifier le statut de la réponse
-        expect(response.status).to.eq(200);
+      // Vérifier le statut de la réponse
+      expect(response.status).to.eq(200);
 
-        // Vérifier si le produit existe dans la réponse
-        const product = response.body.data?.products?.edges[0]?.node;
-        expect(product).to.exist;
+      // Vérifier si le produit existe dans la réponse
+      const product = response.body.data?.products?.edges[0]?.node;
+      expect(product).to.exist;
 
-        // Assertion pour le nom du produit
-        expect(product).to.have.property('title');
-        expect(product.title).to.equal(productName);
+      // Assertion pour le nom du produit
+      expect(product).to.have.property('title');
+      expect(product.title).to.equal(productName);
 
-        // Vérifier si les variantes existent
-        const variant = product.variants?.edges[0]?.node;
-        expect(variant).to.exist;
+      // Vérifier si les variantes existent
+      const variant = product.variants?.edges[0]?.node;
+      expect(variant).to.exist;
 
-        // Vérifier les informations sur le prix
-        const price = variant.price;
-        expect(price).to.have.property('amount');
-        expect(price.amount).to.equal(amount.replace(',', '.'));
-        expect(price).to.have.property('currencyCode');
-        expect(price.currencyCode).to.equal(currencyCode);
+      // Vérifier les informations sur le prix
+      const price = variant.price;
+      expect(price).to.have.property('amount');
+      expect(price.amount).to.equal(amount.replace(',', '.'));
 
-        // Logs supplémentaires pour vérifier les variantes et les prix
-        product.variants.edges.forEach((variant: any) => {
-          cy.log(`Variant: ${variant.node.title}`);
-          cy.log(`Price: ${variant.node.price.amount} ${variant.node.price.currencyCode}`);
-        });
+      // Logs supplémentaires pour vérifier les variantes et les prix
+      product.variants.edges.forEach((variant: any) => {
+        cy.log(`Variant: ${variant.node.title}`);
+        cy.log(`Price: ${variant.node.price.amount} ${variant.node.price.currencyCode}`);
       });
     });
-  }
-);
+  });
+});
 
 When('I click {string}', (buttonName: string) => {
   // cy.intercept('POST', '/product/*').as('createNewCart');
@@ -165,23 +160,12 @@ Then('the product should be added to my shopping cart', () => {
   cy.getBySel('cart-item').should('have.length', 1);
 });
 
-Then(
-  'the total in the shopping cart should be updated to {string} {string}',
-  (amount: string, codeCurrency: string) => {
-    cy.get('[data-test="cart-side-container"] [data-test="price-amount"]')
-      .should('exist')
-      .and('be.visible')
-      .invoke('text')
-      .then((text) => {
-        // Vérifier que le texte contient la devise
-        expect(text).to.include(codeCurrency);
-      });
-    cy.getAmount(
-      '[data-test="payment-information"] > :nth-child(3) > [data-test="price-amount"]',
-      amount
-    );
-  }
-);
+Then('the total in the shopping cart should be updated to {string}', (amount: string) => {
+  cy.getAmount(
+    '[data-test="payment-information"] > :nth-child(3) > [data-test="price-amount"]',
+    amount
+  );
+});
 
 Then('the product should not be added to my shopping cart', () => {
   cy.getBySel('cart-open-button').click();

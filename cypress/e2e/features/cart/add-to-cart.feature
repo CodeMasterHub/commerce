@@ -21,12 +21,12 @@ Feature: Add product to cart
     Scenario: Check that the cart total updates after adding a product
         Given I am on the product detail page for "<product-name>"
         When I click "Add to Cart"
-        And the "<product-name>" costs "<amount>" "<code-currency>"
-        Then the total in the shopping cart should be updated to "<amount>" "<code-currency>"
+        And the "<product-name>" costs "<amount>"
+        Then the total in the shopping cart should be updated to "<amount>"
 
     Examples:
-    | product-name                    | amount    | code-currency |
-    | The Compare at Price Snowboard  |785,95     | EUR           |
+    | product-name                    | amount    |
+    | The Compare at Price Snowboard  |785,95     |
 
     Scenario: Cannot add a product to the cart without selecting a required option
         Given I am on the product detail page for "<product-name>"

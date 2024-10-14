@@ -25,6 +25,8 @@ export default defineConfig({
     specPattern: '**/*.feature',
     video: true,
     screenshotOnRunFailure: true,
+    viewportHeight: 1080,
+    viewportWidth: 1920,
     setupNodeEvents
   }
 });

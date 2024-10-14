@@ -1,5 +1,6 @@
-import clsx from 'clsx';
+//   import clsx from 'clsx';
 
+const locale = 'fr-FR'; // Tu pourrais récupérer cela dynamiquement via des props ou une configuration
 const Price = ({
   amount,
   className,
@@ -12,15 +13,11 @@ const Price = ({
   currencyCodeClassName?: string;
 } & React.ComponentProps<'p'>) => (
   <p suppressHydrationWarning={true} className={className} data-test="price-amount">
-    {`${new Intl.NumberFormat(undefined, {
+    {`${new Intl.NumberFormat(locale, {
       style: 'currency',
       currency: currencyCode,
       currencyDisplay: 'narrowSymbol'
     }).format(parseFloat(amount))}`}
-    <span
-      className={clsx('ml-1 inline', currencyCodeClassName)}
-      data-test="price-currency-code"
-    >{`${currencyCode}`}</span>
   </p>
 );
 
